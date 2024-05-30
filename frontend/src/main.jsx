@@ -9,7 +9,6 @@ import "./index.css";
 import { UserProvider } from "./Context.jsx";
 import Layout from "./components/Layout.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
-import Home from "./pages/Home.jsx";
 import ShowBlog from "./pages/ShowBlog.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import Login from "./pages/Login.jsx";
@@ -17,6 +16,9 @@ import SignUp from "./pages/SignUp.jsx";
 import WriteBlog from "./pages/WriteBlog.jsx"
 import AboutMe from "./pages/AboutMe.jsx";
 import MyBlog from "./pages/MyBlog.jsx";
+import Notifications from "./pages/Notifications.jsx";
+
+import Home from "./pages/Home.jsx";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +62,10 @@ const router = createBrowserRouter([
         path: "my-blog",
         element: <MyBlog />,
       },
+      {
+        path: "user/notifications",
+        element: <Notifications />,
+      }
     ],
   },
 ]);

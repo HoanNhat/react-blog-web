@@ -1,6 +1,5 @@
 package blog.backend.backend.services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class PostService {
         post.setCreatedAt(new Date());
         post.setUpdatedAt(new Date());
         post.setLikes(0);
-        post.setTags(new ArrayList<>());
+        post.setTags(post.getTags());;
 
         post.setUserId(userIdObjectId);
         post.setUserIdString(null);

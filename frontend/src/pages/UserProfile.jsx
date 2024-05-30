@@ -16,8 +16,8 @@ const AuthorProfile = () => {
     setLoading(true);
 
     Promise.all([
-      axios.get(`http://localhost:8080/users/details/${id}`),
-      axios.get(`http://localhost:8080/users/posts/${id}`),
+      axios.get(`${import.meta.env.VITE_BACKEND_API}/users/details/${id}`),
+      axios.get(`${import.meta.env.VITE_BACKEND_API}/users/posts/${id}`),
     ])
       .then(([detailsResponse, postsResponse]) => {
         setUser(detailsResponse.data);
@@ -91,7 +91,7 @@ const AuthorProfile = () => {
                     {post.content
                       ? post.content.length > 250
                         ? parse(post.content.substr(0, 250).concat("... "))
-                        : post.content
+                        : parse(post.content)
                       : null}
                   </div>
                 </span>

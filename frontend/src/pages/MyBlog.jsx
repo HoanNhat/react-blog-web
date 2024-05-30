@@ -24,7 +24,7 @@ const MyBlog = () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
 
     axios
-      .get(`http://localhost:8080/users/posts/${user.id}`)
+      .get(`${import.meta.env.VITE_BACKEND_API}/users/posts/${user.id}`)
       .then((response) => {
         setBlogs(response.data);
         setLoading(false);
@@ -39,7 +39,7 @@ const MyBlog = () => {
     setShowModal(false);
     if (chooseModal === "delete") {
       try {
-        await axios.delete(`http://localhost:8080/posts/${chooseBlog}`);
+        await axios.delete(`${import.meta.env.VITE_BACKEND_API}/posts/${chooseBlog}`);
         setLoading(false);
       } catch (error) {
         console.error("Error deleting post:", error);

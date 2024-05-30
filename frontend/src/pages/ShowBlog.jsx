@@ -12,7 +12,7 @@ const ShowBlog = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:8080/posts/details/${id}`)
+      .get(`${import.meta.env.VITE_BACKEND_API}/posts/details/${id}`)
       .then((response) => {
         setBlog(response.data); 
         setTimeout(() => {
@@ -51,7 +51,7 @@ const ShowBlog = () => {
             Created at {blog.createdAtString} by {blog.user?.fullName || 'Unknown'} <br />
             Last updated {blog.updatedAtString}
           </h3>
-          <img className="h-96" src={blog.image} alt="post_image" />
+          <img className="h-80" src={blog.image} alt="post_image" />
           <div className="w-3/4 mt-2">
             {blog.content ? parse(blog.content) : null}
           </div>

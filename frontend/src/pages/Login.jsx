@@ -25,14 +25,14 @@ const Login = () => {
     e.preventDefault();
     try {
       const loginResponse = await axios.post(
-        "http://localhost:8080/auth/login",
+        `${import.meta.env.VITE_BACKEND_API}/auth/login`,
         formData
       );
       const id = loginResponse.data; 
 
       if (id) {
         const userResponse = await axios.get(
-          `http://localhost:8080/users/details/${id}`
+          `${import.meta.env.VITE_BACKEND_API}/users/details/${id}`
         );
         const user = userResponse.data; 
 

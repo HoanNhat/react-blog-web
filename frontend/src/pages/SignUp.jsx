@@ -37,9 +37,8 @@ const SignUp = () => {
     };
 
     axios
-      .post("http://localhost:8080/users", updatedFormData)
+      .post(`${import.meta.env.VITE_BACKEND_API}/users`, updatedFormData)
       .then((response) => {
-        console.log(response.data);
         navigate('/login');
       })
       .catch((error) => {

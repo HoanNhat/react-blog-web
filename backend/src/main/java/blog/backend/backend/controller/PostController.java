@@ -40,7 +40,7 @@ public class PostController {
     public List<Post> getPost() {
         List<Post> posts = service.findAllPosts();
 
-        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
         outputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         posts.forEach(post -> {

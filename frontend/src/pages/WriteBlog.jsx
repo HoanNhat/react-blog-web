@@ -16,7 +16,7 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
   const [blog, setBlog] = useState({});
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTag] = useState("Uncategorized");
+  const [tags, setTag] = useState(["Uncategorized"]);
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUploadURL, setImageUploadURL] = useState("");
 
@@ -35,7 +35,7 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/posts/details/${chooseBlog}`)
+      .get(`${import.meta.env.VITE_BACKEND_API}/posts/details/${chooseBlog}`)
       .then((response) => {
         setBlog(response.data);  
         setTitle(blog.title)
@@ -91,7 +91,7 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
       console.log("updated blog", updatedBlog);
 
       axios
-        .put("http://localhost:8080/posts", updatedBlog)
+        .put(`${import.meta.env.VITE_BACKEND_API}/posts`, updatedBlog)
         .then((response) => {
           navigate("/my-blog");
         })
@@ -102,13 +102,14 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
       const newBlog = {
         content,
         title,
+        tags: tags,
         userIdString: user.id,
         image: imageUploadURL,
       };
       console.log(newBlog);
 
       axios
-        .post("http://localhost:8080/posts", newBlog)
+        .post(`${import.meta.env.VITE_BACKEND_API}/posts`, newBlog)
         .then((response) => {
           navigate("/");
         })
