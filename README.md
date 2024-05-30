@@ -5,10 +5,9 @@ Welcome to the Blog Website, a modern and fully-featured blogging platform built
 ## Features
 
 - **Rich Text Editing**: Create and edit blog posts with a rich text editor.
-- **Image Upload**: Upload and attach images to your blog posts.
-- **Tagging System**: Categorize your posts with tags.
+- **Buid frontend with Tailwind CSS**: Easy design with tailwind framework
+- **Image Upload with Fire base**: Upload and attach images to your blog posts.
 - **User Authentication**: Secure login and registration functionality.
-- **Responsive Design**: Mobile-friendly interface using Tailwind CSS.
 - **RESTful API**: Efficient and scalable backend built with Java Spring.
 
 ## Technologies Used
@@ -26,7 +25,6 @@ Welcome to the Blog Website, a modern and fully-featured blogging platform built
 - **Java Spring Boot**: A framework for building stand-alone, production-grade Spring-based applications.
 - **Spring Security**: For handling authentication and authorization.
 - **Spring Data JPA**: For interacting with the database.
-- **H2 Database**: A lightweight in-memory database for development and testing.
 
 ## Getting Started
 
@@ -40,8 +38,8 @@ Welcome to the Blog Website, a modern and fully-featured blogging platform built
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/blog-website.git
-   cd blog-website/frontend
+   git clone https://github.com/HoanNhat/react-blog-web.git
+   cd react-blog-web/frontend
 
 2. **Install dependencies**:
    npm install
