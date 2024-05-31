@@ -1,7 +1,6 @@
-package blog.backend.backend.models;
+package blog.backend.models;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,7 +30,7 @@ public class Post {
 
     private User user;
 
-    private List<String> tags;
+    private String tags;
 
     private Date createdAt;
 

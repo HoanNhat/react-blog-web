@@ -6,15 +6,13 @@ import Sidebar from './Sidebar'
 
 const Layout = () => {
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div>
       <Navbar/>
-      <div className='flex flex-grow'>
-        <Sidebar />
-        <div className='flex flex-grow justify-center'>
-          <Outlet />
-        </div>
+      <Sidebar />
+      <div className='flex h-auto flex-col place-items-center justify-center'>
+        <Outlet />
+        <Footer />
       </div>
-      <Footer />
     </div>
   )
 }

@@ -7,6 +7,7 @@ import parse from "html-react-parser";
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -20,6 +21,19 @@ const Home = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleClickLike = (id) => {
+    axios
+      .put(`${import.meta.env.VITE_BACKEND_API}/posts/likes/${id}`)
+      .then((response) => {
+        setBlogs(blogs.map(blog => 
+          blog.id === id ? { ...blog, likes: blog.likes + 1 } : blog
+        ));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -58,19 +72,23 @@ const Home = () => {
 
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
             {blogs.map((blog, index) => (
-              <div key={index} className="flex flex-col overflow-hidden rounded shadow-lg">
+              <div
+                key={index}
+                className="flex flex-col overflow-hidden rounded shadow-lg"
+              >
                 <div className="relative">
                   <img
                     className="h-60 w-full object-cover"
                     src={blog.image}
                     alt="blog-image"
                   />
-                  <div className="absolute right-0 top-0 mr-3 mt-3 rounded-full border bg-white px-4 py-2 text-xs font-bold transition duration-500 ease-in-out hover:text-indigo-600 hover:cursor-pointer">
-                    {blog.tags[0]}
+                  <div className="absolute right-0 top-0 mr-3 mt-3 rounded-full border bg-violet-300 px-4 py-2 text-xs font-bold transition duration-500 ease-in-out hover:text-indigo-600 hover:cursor-pointer">
+                    {blog.tags}
                   </div>
                 </div>
                 <div className="mb-auto px-6 pt-4">
-                  <Link to={`/posts/details/${blog.id}`}
+                  <Link
+                    to={`/posts/details/${blog.id}`}
                     className="mb-2 inline-block text-lg font-medium transition duration-500 ease-in-out hover:text-indigo-600"
                   >
                     {blog.title}
@@ -84,7 +102,10 @@ const Home = () => {
                     }
                   </article> */}
                 </div>
-                <Link to={`/users/details/${blog.user.id}`} className="mb-2 px-6 hover:cursor-pointer">
+                <Link
+                  to={`/users/details/${blog.user.id}`}
+                  className="mb-2 px-6 hover:cursor-pointer"
+                >
                   <span className="mt-4 flex place-items-start gap-3">
                     <img
                       className="h-11 w-11 rounded-full"
@@ -121,21 +142,27 @@ const Home = () => {
                   </span>
 
                   <span className="flex h-8 items-center gap-1 rounded-md px-3 py-1.5 text-center text-sm hover:scale-105 hover:cursor-pointer hover:text-red-600 lg:gap-2">
-                    <svg
-                      className="h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="-2 -2 24 24"
-                      strokeWidth="1.8"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg" d="M 9.5 17.09375 C 5.042969 12.710938 0.792969 8.941406 0.792969 5.691406 C 0.792969 2.691406 3.21875 1.582031 4.972656 1.582031 C 6.011719 1.582031 8.257812 1.980469 9.5 5.113281 C 10.757812 1.96875 13.035156 1.589844 14.03125 1.589844 C 16.042969 1.589844 18.207031 2.875 18.207031 5.691406 C 18.207031 8.914062 14.140625 12.519531 9.5 17.09375 M 14.03125 0.800781 C 12.289062 0.800781 10.511719 1.625 9.5 3.363281 C 8.484375 1.617188 6.710938 0.792969 4.972656 0.792969 C 2.453125 0.792969 0 2.523438 0 5.691406 C 0 9.382812 4.410156 13.15625 9.5 18.207031 C 14.589844 13.15625 19 9.382812 19 5.691406 C 19 2.515625 16.550781 0.800781 14.03125 0.800781"/>
-                      
-                      {/* <path
-                        d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"
-                      ></path> */}
-                    </svg>
+                    <button onClick={() => handleClickLike(blog.id)}>
+                      <svg
+                        className="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="-2 -2 24 24"
+                        strokeWidth="1.8"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          xmlns="http://www.w3.org/2000/svg"
+                          d="M 9.5 17.09375 C 5.042969 12.710938 0.792969 8.941406 0.792969 5.691406 C 0.792969 2.691406 3.21875 1.582031 4.972656 1.582031 C 6.011719 1.582031 8.257812 1.980469 9.5 5.113281 C 10.757812 1.96875 13.035156 1.589844 14.03125 1.589844 C 16.042969 1.589844 18.207031 2.875 18.207031 5.691406 C 18.207031 8.914062 14.140625 12.519531 9.5 17.09375 M 14.03125 0.800781 C 12.289062 0.800781 10.511719 1.625 9.5 3.363281 C 8.484375 1.617188 6.710938 0.792969 4.972656 0.792969 C 2.453125 0.792969 0 2.523438 0 5.691406 C 0 9.382812 4.410156 13.15625 9.5 18.207031 C 14.589844 13.15625 19 9.382812 19 5.691406 C 19 2.515625 16.550781 0.800781 14.03125 0.800781"
+                        />
+
+                        {/* <path
+                          d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"
+                        ></path> */}
+                      </svg>
+                    </button>
+
                     <span>{blog.likes}</span>
                   </span>
 

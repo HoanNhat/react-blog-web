@@ -16,12 +16,31 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
   const [blog, setBlog] = useState({});
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTag] = useState(["Uncategorized"]);
+  const [tag, setTag] = useState("Uncategorized");
   const [imageUpload, setImageUpload] = useState(null);
   const [imageUploadURL, setImageUploadURL] = useState("");
 
+  const listTag = [
+    "Uncategorized",
+    "Technology",
+    "Coding",
+    "Web",
+    "Database",
+    "DevOps",
+    "Security",
+    "AI",
+    "Mobile",
+    "Network",
+    "News",
+    "Internet"
+  ];
+
   const handleEditorChange = (content) => {
     setContent(content);
+  };
+
+  const handleTagChange = (event) => {
+    setTag(event.target.value);
   };
 
   const handleInputChange = (e) => {
@@ -34,11 +53,12 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
   };
 
   useEffect(() => {
+    if (!chooseBlog) return;
     axios
       .get(`${import.meta.env.VITE_BACKEND_API}/posts/details/${chooseBlog}`)
       .then((response) => {
-        setBlog(response.data);  
-        setTitle(blog.title)
+        setBlog(response.data);
+        setTitle(blog.title);
       })
       .catch((error) => {
         console.log(error);
@@ -102,7 +122,7 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
       const newBlog = {
         content,
         title,
-        tags: tags,
+        tags: tag,
         userIdString: user.id,
         image: imageUploadURL,
       };
@@ -144,12 +164,22 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
         >
           Category
         </label>
-        <input
+        {/* <input
           name="category"
           id="category"
+          type=""
           className="mt-2 bg-gray-50 border w-full border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           value={chooseBlog ? blog.tags : tags}
-        />
+        /> */}
+        <select 
+          onChange={handleTagChange}
+          id="countries"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          {listTag.map((tag, index) => (
+            <option key={index} value={tag}>{tag}</option>
+          ))}
+        </select>
       </div>
       <div className="mt-4">
         <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">

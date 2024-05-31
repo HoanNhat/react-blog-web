@@ -1,13 +1,13 @@
-package blog.backend.backend.services;
+package blog.backend.services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import blog.backend.backend.models.User;
-import blog.backend.backend.models.Post;
-import blog.backend.backend.repository.UserRepository;
+import blog.backend.models.Post;
+import blog.backend.models.User;
+import blog.backend.repository.UserRepository;
 
 @Service
 public class UserService {

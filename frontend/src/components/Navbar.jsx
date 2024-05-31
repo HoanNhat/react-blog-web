@@ -26,11 +26,11 @@ const Navbar = () => {
 
   return (
     <header className=" max-w-screen-2xl container mx-auto xl:px-24 px-4 pt-8">
-      <nav className="flex justify-between items-center py-2">
+      <nav className="flex justify-between items-center pb-4">
         <span className="w-36"></span>
         <ul className="hidden md:flex gap-20 font-semibold text-xl">
           {navItems.map(({ path, title }) => (
-            <li key={path}>
+            <li className="hover:scale-150" key={path}>
               <NavLink
                 to={path}
                 className={({ isActive }) => (isActive ? "active" : "")}

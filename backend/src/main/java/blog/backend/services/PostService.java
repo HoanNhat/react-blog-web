@@ -1,14 +1,15 @@
-package blog.backend.backend.services;
+package blog.backend.services;
 
 import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import blog.backend.backend.models.Post;
-import blog.backend.backend.repository.PostRepository;
+import blog.backend.models.Post;
+import blog.backend.repository.PostRepository;
 
 @Service
 public class PostService {
@@ -36,19 +37,20 @@ public class PostService {
         post.setCreatedAt(new Date());
         post.setUpdatedAt(new Date());
         post.setLikes(0);
-        post.setTags(post.getTags());;
+        post.setTags(post.getTags());
 
         post.setUserId(userIdObjectId);
         post.setUserIdString(null);
         return repository.save(post);
     }
 
-    public Post updatePost(Post post) {
-        return repository.save(post);
+    public HttpStatus updatePost(Post post) {
+        repository.save(post);
+        return HttpStatus.OK;
     }
 
-    public String deletePostById(String id) {
+    public HttpStatus deletePostById(String id) {
         repository.deleteById(id);
-        return "Delete Successfull Post " + id;
+        return HttpStatus.OK;
     }
 }

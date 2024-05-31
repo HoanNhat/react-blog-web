@@ -1,4 +1,4 @@
-package blog.backend.backend.models;
+package blog.backend.models;
 
 import java.util.Date;
 import java.lang.String;

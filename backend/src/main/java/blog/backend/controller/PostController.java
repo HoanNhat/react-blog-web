@@ -1,4 +1,4 @@
-package blog.backend.backend.controller;
+package blog.backend.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import blog.backend.backend.models.Post;
-import blog.backend.backend.services.PostService;
-import blog.backend.backend.services.UserService;
+import blog.backend.models.Post;
+import blog.backend.services.PostService;
+import blog.backend.services.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/posts")
 public class PostController {
     @Autowired
@@ -78,12 +76,21 @@ public class PostController {
     }
 
     @PutMapping()
-    public Post updatePost(@RequestBody Post post) {
+    public HttpStatus updatePost(@RequestBody Post post) {            
+        return service.updatePost(post);  
+    }
+
+    @PutMapping("/likes/{postId}")
+    public HttpStatus likePost(@PathVariable String postId) {
+        Post post = service.findPostById(postId);
+        Integer curLikes = post.getLikes();
+
+        post.setLikes(curLikes + 1);
         return service.updatePost(post);       
     }
 
     @DeleteMapping("/{postId}")
-    public String deletePost(@PathVariable String postId) {
+    public HttpStatus deletePost(@PathVariable String postId) {
         return service.deletePostById(postId);
     }
 }

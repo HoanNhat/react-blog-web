@@ -63,7 +63,7 @@ const Sidebar = () => {
                 </span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -79,7 +79,7 @@ const Sidebar = () => {
                 </svg>
                 <span className="ms-3 flex-1 whitespace-nowrap">Friends</span>
               </a>
-            </li>
+            </li> */}
             <li>
               <Link
                 to={`/users/posts/new-blog`}
