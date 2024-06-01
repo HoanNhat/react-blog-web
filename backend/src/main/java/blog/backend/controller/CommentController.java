@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +22,19 @@ public class CommentController {
     @Autowired
     public CommentService service;  
 
-    // @GetMapping
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public List<Comment> findAllComments(@RequestBody String postId) {
-    //     return service.findAllComments(postId);
-    // }
+    @GetMapping("/{postId}")
+    public List<Comment> findAllComments(@PathVariable String postId) {
+        return service.findAllCommentsByPostId(postId);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Comment createComment(@RequestBody Comment cmt, @RequestParam String userCommentId) {
         return service.addComment(cmt, userCommentId);
+    }
+
+    @GetMapping("/count/{postId}")
+    public long countPostComment(@PathVariable String postId) {
+        return service.countCommentOfPost(postId);
     }
 }

@@ -42,6 +42,6 @@ public class Post {
 
     private Integer likes;
 
-    // private List<Comment> comments;
+    private long comments;
 
 }

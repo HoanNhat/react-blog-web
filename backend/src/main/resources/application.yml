@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   data: 
     mongodb: 
       url: mongodb://localhost:27017

@@ -3,14 +3,15 @@ package blog.backend.services;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import blog.backend.models.Comment;
+import blog.backend.models.User;
 import blog.backend.repository.CommentRepository;
 
 @Service
@@ -19,28 +20,30 @@ public class CommentService {
     private CommentRepository repository;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private MongoTemplate mongo;
+    
+    @Autowired
+    private UserService userRepository;
 
     public Comment addComment(Comment cmt, String userCommentId) {
         cmt.setCreatedAt(new Date());
 
-        LookupOperation lookupOperation = LookupOperation.newLookup()
-                            .from("users")
-                            .localField(userCommentId)
-                            .foreignField("_id")
-                            .as("userComment");
+        User userComment = userRepository.findUserById(userCommentId);
+        cmt.setUserComment(userComment);
 
-        Aggregation aggregation = Aggregation.newAggregation(lookupOperation);
-        System.out.println(aggregation);
-        Comment results = mongoTemplate.aggregate(aggregation, "comments", Comment.class).getUniqueMappedResult();
-
-        return repository.save(results);
+        return repository.save(cmt);
     }
 
-    // public List<Comment> findAllComments(String postID){
-        
-    //     System.out.println(results);
+    public List<Comment> findAllCommentsByPostId(String postID) {  
+        return repository.findByPostId(postID);
+    }
 
-    //     return results;
-    // }
+    public long countCommentOfPost(String postId) {
+        Query query = new Query();
+        ObjectId postObjectId = new ObjectId(postId);
+
+        query.addCriteria(Criteria.where("postId").is(postObjectId));
+
+        return mongo.count(query, Comment.class);
+    }
 }

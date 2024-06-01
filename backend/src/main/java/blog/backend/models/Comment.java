@@ -22,7 +22,6 @@ public class Comment {
 
     private String content;
 
-    // private ObjectId userCommentId;
     private User userComment;
 
     private ObjectId postId;

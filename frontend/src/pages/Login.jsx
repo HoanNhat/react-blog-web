@@ -43,7 +43,7 @@ const Login = () => {
         navigate("/");
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error) {
         setError("Email or password is incorrect !!!");
         return;
       }

@@ -16,8 +16,17 @@ public class PostService {
     @Autowired
     private PostRepository repository;
 
+    @Autowired
+    private CommentService commentService;
+
     public List<Post> findAllPosts() {
-        return repository.findAll();
+        List<Post> posts = repository.findAll();
+
+        for (Post post : posts) {
+            post.setComments(commentService.countCommentOfPost(post.getId()));
+        }
+
+        return posts;
     }
 
     public Post findPostById(String id) {
@@ -37,6 +46,7 @@ public class PostService {
         post.setCreatedAt(new Date());
         post.setUpdatedAt(new Date());
         post.setLikes(0);
+        post.setComments(0);
         post.setTags(post.getTags());
 
         post.setUserId(userIdObjectId);
