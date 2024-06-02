@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import TextEditor from "../components/TextEditor";
 import { UserContext } from "../Context";
-import { storage, getImage } from "../Firebase.jsx";
+import { storage } from "../Firebase.jsx";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -16,9 +16,9 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
   const [blog, setBlog] = useState({});
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [imageCover, setImageCover] = useState();
   const [tag, setTag] = useState("Uncategorized");
   const [imageUpload, setImageUpload] = useState(null);
-  const [imageUploadURL, setImageUploadURL] = useState("");
 
   const listTag = [
     "Uncategorized",
@@ -32,7 +32,8 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
     "Mobile",
     "Network",
     "News",
-    "Internet"
+    "Internet",
+    "Other"
   ];
 
   const handleEditorChange = (content) => {
@@ -65,31 +66,62 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
       });
   }, [chooseBlog]);
 
-  useEffect(() => {
-    if (imageUpload) {
-      const imageName = "blog-cover-" + imageUpload.name;
-      const imageRef = ref(storage, `image/blog-cover/${imageName}`);
+  function uploadImageToCloud() {
+    return new Promise((resolve, reject) => {
+      if (imageUpload) {
+        const imageName = "blog-cover-" + imageUpload.name;
+        const imageRef = ref(storage, `image/blog-cover/${imageName}`);
+  
+        uploadBytes(imageRef, imageUpload)
+          .then((snapshot) => {
+            alert("Image uploaded");
+            getDownloadURL(snapshot.ref)
+              .then((url) => {
+                resolve(url);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          })
+          .catch((error) => {
+            reject("Error uploading image: " + error);
+          });
+      } else {
+        reject("No image to upload");
+      }
+    });
+  }
+  
 
-      uploadBytes(imageRef, imageUpload)
-        .then((snapshot) => {
-          alert("Image uploaded");
-          getDownloadURL(snapshot.ref)
-            .then((url) => {
-              setImageUploadURL(url);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        })
-        .catch((error) => {
-          console.error("Error uploading image: ", error);
-        });
-    }
-  }, [imageUpload]);
+  // useEffect(() => {
+  //   if (imageUpload) {
+  //     const imageName = "blog-cover-" + imageUpload.name;
+  //     const imageRef = ref(storage, `image/blog-cover/${imageName}`);
+
+  // uploadBytes(imageRef, imageUpload)
+  //   .then((snapshot) => {
+  //     alert("Image uploaded");
+  //     getDownloadURL(snapshot.ref)
+  //       .then((url) => {
+  //         setImageUploadURL(url);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   })
+  // .catch((error) => {
+  //   console.error("Error uploading image: ", error);
+  // });
+  //   }
+  // }, [imageUpload]);
 
   const uploadImage = (e) => {
     e.preventDefault();
+
     const file = e.target.files[0];
+    const imageCoverTempLink = URL.createObjectURL(file);
+
+    setImageCover(imageCoverTempLink);
 
     if (file == null) {
       console.log("No image upload");
@@ -98,7 +130,7 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (chooseBlog) {
       const updatedBlog = {
@@ -108,7 +140,6 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
         title: title ? title : blog.title,
         updatedAt: new Date(),
       };
-      console.log("updated blog", updatedBlog);
 
       axios
         .put(`${import.meta.env.VITE_BACKEND_API}/posts`, updatedBlog)
@@ -119,6 +150,8 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
           console.error(error);
         });
     } else {
+      const imageUploadURL = await uploadImageToCloud();
+
       const newBlog = {
         content,
         title,
@@ -126,7 +159,6 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
         userIdString: user.id,
         image: imageUploadURL,
       };
-      console.log(newBlog);
 
       axios
         .post(`${import.meta.env.VITE_BACKEND_API}/posts`, newBlog)
@@ -171,13 +203,15 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
           className="mt-2 bg-gray-50 border w-full border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           value={chooseBlog ? blog.tags : tags}
         /> */}
-        <select 
+        <select
           onChange={handleTagChange}
           id="countries"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           {listTag.map((tag, index) => (
-            <option key={index} value={tag}>{tag}</option>
+            <option key={index} value={tag}>
+              {tag}
+            </option>
           ))}
         </select>
       </div>
@@ -188,7 +222,11 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
         <div className="flex items-center justify-center">
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className={
+              imageCover
+                ? "hidden"
+                : "flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            }
           >
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
@@ -210,7 +248,6 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
                 <span className="font-semibold">Click to upload image</span>
               </p>
             </div>
-            {/* <img className="h-96" src={imageUploadURL}/> */}
             <input
               id="dropzone-file"
               type="file"
@@ -219,6 +256,17 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
               onChange={uploadImage}
             />
           </label>
+          <div className={imageCover ? "text-center" : "hidden"}>
+            <button
+              className="font-medium text-red-400"
+              onClick={() => {
+                setImageCover();
+              }}
+            >
+              Remove cover
+            </button>
+            <img className="h-96" src={imageCover} />
+          </div>
         </div>
       </div>
       <div className="flex flex-col min-h-96">
