@@ -54,6 +54,12 @@ const WriteBlog = ({ pageTitle, buttonTitle }) => {
   };
 
   useEffect(() => {
+    return() => {
+      imageCover && URL.revokeObjectURL(imageCover);
+    }
+  }, [imageCover]);
+
+  useEffect(() => {
     if (!chooseBlog) return;
     axios
       .get(`${import.meta.env.VITE_BACKEND_API}/posts/details/${chooseBlog}`)
