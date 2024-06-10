@@ -23,39 +23,26 @@ Welcome to the Blog Website, a modern and fully-featured blogging platform built
 ### Backend
 
 - **Java Spring Boot**: A framework for building stand-alone, production-grade Spring-based applications.
-- **Spring Security**: For handling authentication and authorization.
 - **Spring Data JPA**: For interacting with the database.
 
-## Getting Started
+### Demo some image in web
 
-### Prerequisites
+**Login page**
+<img src="img/login.png">
 
-- **Node.js**: Ensure you have Node.js installed on your machine.
-- **Java**: Ensure you have JDK 11 or higher installed.
-- **Maven**: Ensure you have Maven installed.
+**Home page**
+<img src="img/home.png">
 
-### Frontend Setup
+**Author profile**
+<img src="img/profile.png">
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/HoanNhat/react-blog-web.git
-   cd react-blog-web/frontend
+**Manage blog**
+<img src="img/manage.png">
 
-2. **Install dependencies**:
-   npm install
+**View blog**
+<img src="img/view_blog1.png">
+<img src="img/view_blog2.png">
 
-3. **Start the development server**:
-   npm run dev
+**Write new blog**
+<img src="img/write_new.png">
 
-4. **Access the application**:
-   Open your browser and navigate to http://localhost:5173
-
-### Backend Setup
-1. **Build the project**:
-   mvn clean install
-
-2. **Run the application**:
-   mvn spring-boot:run
-
-3. **Access the API**:
-   The API will be running at http://localhost:8080
